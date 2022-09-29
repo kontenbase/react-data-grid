@@ -90,17 +90,13 @@ function Cell<R, SR>({
       onFocus={onFocus}
       {...props}
     >
-      {!column.rowGroup && (
-        <>
-          {column.formatter({
-            column,
-            row,
-            isCellSelected,
-            onRowChange: handleRowChange
-          })}
-          {dragHandle}
-        </>
-      )}
+      {column.formatter({
+        column,
+        row,
+        isCellSelected,
+        onRowChange: handleRowChange
+      })}
+      {dragHandle}
     </div>
   );
 }

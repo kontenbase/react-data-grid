@@ -1,7 +1,7 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 import { getCellStyle, getCellClassname } from './utils';
-import type { CalculatedColumn, GroupRow } from './types';
+import type { CalculatedColumn, GroupFormatterProps, GroupRow } from './types';
 import type { GroupRowRendererProps } from './GroupRow';
 import { useRovingCellRef } from './hooks';
 
@@ -15,6 +15,19 @@ interface GroupCellProps<R, SR> extends SharedGroupRowRendererProps<R, SR> {
   row: GroupRow<R>;
   isCellSelected: boolean;
   groupColumnIndex: number;
+  level: number;
+}
+
+interface CustomGroupFormatterProps<R, SR> extends GroupFormatterProps<R, SR> {
+  groupColumnIndex: number;
+}
+
+function customFormatter<R, SR>({ groupColumnIndex, groupKey }: CustomGroupFormatterProps<R, SR>) {
+  return (
+    <div style={{ paddingLeft: `${groupColumnIndex}rem` }}>
+      <span>{groupKey as string}</span>
+    </div>
+  );
 }
 
 function GroupCell<R, SR>({
@@ -35,7 +48,14 @@ function GroupCell<R, SR>({
   }
 
   // Only make the cell clickable if the group level matches
-  const isLevelMatching = column.rowGroup && groupColumnIndex === column.idx;
+  const isLevelMatching = column.idx === 0;
+
+  const groupFormatter = React.useMemo(() => {
+    if (column.idx === 0) {
+      return customFormatter;
+    }
+    return column.groupFormatter;
+  }, [column.idx, column.groupFormatter]);
 
   return (
     <div
@@ -48,20 +68,22 @@ function GroupCell<R, SR>({
       className={getCellClassname(column)}
       style={{
         ...getCellStyle(column),
-        cursor: isLevelMatching ? 'pointer' : 'default'
+        cursor: isLevelMatching ? 'pointer' : 'default',
+        backgroundColor: isLevelMatching ? 'yellow' : undefined
       }}
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}
     >
-      {(!column.rowGroup || groupColumnIndex === column.idx) &&
-        column.groupFormatter?.({
+      {((!column.rowGroup && column.idx === 0) || (column.rowGroup && column.idx === 0)) &&
+        groupFormatter?.({
           groupKey,
           childRows,
           column,
           row,
           isExpanded,
           isCellSelected,
-          toggleGroup
+          toggleGroup,
+          groupColumnIndex
         })}
     </div>
   );

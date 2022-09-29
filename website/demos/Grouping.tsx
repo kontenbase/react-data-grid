@@ -67,10 +67,11 @@ const sports = [
 ];
 
 const columns: readonly Column<Row>[] = [
-  SelectColumn,
+  // SelectColumn,
   {
     key: 'country',
-    name: 'Country'
+    name: 'Country',
+    frozen: true
   },
   {
     key: 'year',
@@ -86,34 +87,34 @@ const columns: readonly Column<Row>[] = [
   },
   {
     key: 'gold',
-    name: 'Gold',
-    groupFormatter({ childRows }) {
-      return <>{childRows.reduce((prev, { gold }) => prev + gold, 0)}</>;
-    }
+    name: 'Gold'
+    // groupFormatter({ childRows }) {
+    //   return <>{childRows.reduce((prev, { gold }) => prev + gold, 0)}</>;
+    // }
   },
   {
     key: 'silver',
-    name: 'Silver',
-    groupFormatter({ childRows }) {
-      return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    }
+    name: 'Silver'
+    // groupFormatter({ childRows }) {
+    //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
+    // }
   },
   {
     key: 'bronze',
-    name: 'Bronze',
-    groupFormatter({ childRows }) {
-      return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    }
+    name: 'Bronze'
+    // groupFormatter({ childRows }) {
+    //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
+    // }
   },
   {
     key: 'total',
     name: 'Total',
     formatter({ row }) {
       return <>{row.gold + row.silver + row.bronze}</>;
-    },
-    groupFormatter({ childRows }) {
-      return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
     }
+    // groupFormatter({ childRows }) {
+    //   return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
+    // }
   }
 ];
 

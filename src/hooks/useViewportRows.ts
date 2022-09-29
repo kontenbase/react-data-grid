@@ -83,7 +83,7 @@ export function useViewportRows<R>({
       Object.keys(rows).forEach((groupKey, posInSet, keys) => {
         // TODO: should users have control over the generated key?
         const id = parentId !== undefined ? `${parentId}__${groupKey}` : groupKey;
-        const isExpanded = expandedGroupIds?.has(id) ?? false;
+        const isExpanded = !expandedGroupIds?.has(id);
         const { childRows, childGroups, startRowIndex } = rows[groupKey];
 
         const groupRow: GroupRow<R> = {
@@ -189,6 +189,7 @@ export function useViewportRows<R>({
     rowsCount,
     totalRowHeight,
     gridTemplateRows,
+    groupedRows,
     isGroupRow,
     getRowTop,
     getRowHeight,
