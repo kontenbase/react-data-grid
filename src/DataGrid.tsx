@@ -182,6 +182,10 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
   /** @default 'ltr' */
   direction?: Maybe<Direction>;
   'data-testid'?: Maybe<string>;
+  /**
+   * Custom
+   */
+  groupPrimaryIndex?: number;
 }
 
 /**
@@ -234,6 +238,8 @@ function DataGrid<R, SR, K extends Key>(
     style,
     rowClass,
     direction: rawDirection,
+    // Custom
+    groupPrimaryIndex = 0,
     // ARIA
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
@@ -1078,6 +1084,7 @@ function DataGrid<R, SR, K extends Key>(
             groupKey={row.groupKey}
             groupField={groupBy[row.level]}
             viewportColumns={rowColumns}
+            groupPrimaryIndex={groupPrimaryIndex}
             childRows={row.childRows}
             rowIdx={rowIdx}
             row={row}

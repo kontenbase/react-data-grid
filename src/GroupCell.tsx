@@ -17,6 +17,7 @@ interface GroupCellProps<R, SR> extends SharedGroupRowRendererProps<R, SR> {
   isCellSelected: boolean;
   groupColumnIndex: number;
   groupField: string;
+  groupPrimaryIndex: number;
 }
 
 function GroupCell<R, SR>({
@@ -29,6 +30,7 @@ function GroupCell<R, SR>({
   row,
   groupColumnIndex,
   groupField,
+  groupPrimaryIndex,
   toggleGroup: toggleGroupWrapper
 }: GroupCellProps<R, SR>) {
   const { ref, tabIndex, onFocus } = useRovingCellRef(isCellSelected);
@@ -38,14 +40,14 @@ function GroupCell<R, SR>({
   }
 
   // Only make the cell clickable if the group level matches
-  const isLevelMatching = column.idx === 0;
+  const isLevelMatching = column.idx === groupPrimaryIndex;
 
   const groupFormatter = React.useMemo(() => {
-    if (column.idx === 0) {
+    if (column.idx === groupPrimaryIndex) {
       return airtableFormatter;
     }
     return column.groupFormatter;
-  }, [column.idx, column.groupFormatter]);
+  }, [column.idx, column.groupFormatter, groupPrimaryIndex]);
 
   return (
     <div
@@ -63,7 +65,8 @@ function GroupCell<R, SR>({
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}
     >
-      {((!column.rowGroup && column.idx === 0) || (column.rowGroup && column.idx === 0)) &&
+      {((!column.rowGroup && column.idx === groupPrimaryIndex) ||
+        (column.rowGroup && column.idx === groupPrimaryIndex)) &&
         groupFormatter?.({
           groupKey,
           childRows,
