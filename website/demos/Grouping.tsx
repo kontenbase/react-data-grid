@@ -197,6 +197,12 @@ export default function Grouping({ direction }: Props) {
         onExpandedGroupIdsChange={setExpandedGroupIds}
         defaultColumnOptions={{ resizable: true }}
         direction={direction}
+        rowHeight={(arg) => {
+          if (arg.type === 'GROUP') {
+            return 48;
+          }
+          return 30;
+        }}
       />
     </div>
   );

@@ -97,7 +97,7 @@ function GroupedRow<R, SR>({
             row={row}
             groupColumnIndex={idx}
             toggleGroup={toggleGroup}
-            level={level}
+            groupField={groupField}
           />
         ))}
       </div>

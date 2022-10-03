@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 
 import { getCellStyle, getCellClassname } from './utils';
-import type { CalculatedColumn, GroupFormatterProps, GroupRow } from './types';
+import type { CalculatedColumn, GroupRow } from './types';
 import type { GroupRowRendererProps } from './GroupRow';
 import { useRovingCellRef } from './hooks';
+import { airtableFormatter } from './formatters';
 
 type SharedGroupRowRendererProps<R, SR> = Pick<
   GroupRowRendererProps<R, SR>,
@@ -15,19 +16,7 @@ interface GroupCellProps<R, SR> extends SharedGroupRowRendererProps<R, SR> {
   row: GroupRow<R>;
   isCellSelected: boolean;
   groupColumnIndex: number;
-  level: number;
-}
-
-interface CustomGroupFormatterProps<R, SR> extends GroupFormatterProps<R, SR> {
-  groupColumnIndex: number;
-}
-
-function customFormatter<R, SR>({ groupColumnIndex, groupKey }: CustomGroupFormatterProps<R, SR>) {
-  return (
-    <div style={{ paddingLeft: `${groupColumnIndex}rem` }}>
-      <span>{groupKey as string}</span>
-    </div>
-  );
+  groupField: string;
 }
 
 function GroupCell<R, SR>({
@@ -39,6 +28,7 @@ function GroupCell<R, SR>({
   column,
   row,
   groupColumnIndex,
+  groupField,
   toggleGroup: toggleGroupWrapper
 }: GroupCellProps<R, SR>) {
   const { ref, tabIndex, onFocus } = useRovingCellRef(isCellSelected);
@@ -52,7 +42,7 @@ function GroupCell<R, SR>({
 
   const groupFormatter = React.useMemo(() => {
     if (column.idx === 0) {
-      return customFormatter;
+      return airtableFormatter;
     }
     return column.groupFormatter;
   }, [column.idx, column.groupFormatter]);
@@ -68,8 +58,7 @@ function GroupCell<R, SR>({
       className={getCellClassname(column)}
       style={{
         ...getCellStyle(column),
-        cursor: isLevelMatching ? 'pointer' : 'default',
-        backgroundColor: isLevelMatching ? 'yellow' : undefined
+        cursor: isLevelMatching ? 'pointer' : 'default'
       }}
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}
@@ -83,7 +72,8 @@ function GroupCell<R, SR>({
           isExpanded,
           isCellSelected,
           toggleGroup,
-          groupColumnIndex
+          groupColumnIndex,
+          groupField
         })}
     </div>
   );
