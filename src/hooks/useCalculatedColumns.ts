@@ -50,7 +50,7 @@ export function useCalculatedColumns<R, SR>({
     groupBy: readonly string[];
   } => {
     // Filter rawGroupBy and ignore keys that do not match the columns prop
-    const groupBy: string[] = [];
+    const groupBy: string[] = (rawGroupBy ?? []) as string[];
     let lastFrozenColumnIndex = -1;
 
     const columns = rawColumns.map((rawColumn) => {
@@ -112,9 +112,9 @@ export function useCalculatedColumns<R, SR>({
     columns.forEach((column, idx) => {
       column.idx = idx;
 
-      if (column.rowGroup) {
-        groupBy.push(column.key);
-      }
+      // if (column.rowGroup) {
+      //   groupBy.push(column.key);
+      // }
 
       if (column.colSpan != null) {
         colSpanColumns.push(column);

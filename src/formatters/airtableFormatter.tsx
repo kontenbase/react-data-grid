@@ -61,7 +61,7 @@ export function airtableFormatter<R, SR>({
         style={{
           marginRight: 12,
           cursor: 'pointer',
-          rotate: isExpanded ? '270deg' : '0deg'
+          rotate: !isExpanded ? '270deg' : '0deg'
         }}
       >
         <path d={d} fill="currentColor" />
@@ -75,9 +75,7 @@ export function airtableFormatter<R, SR>({
           left: `${groupColumnIndex + 1}rem`
         }}
       >
-        {String(
-          [undefined, null].includes(groupKey as null | undefined) ? '(Empty)' : String(groupKey)
-        )}
+        {['undefined', 'null'].includes(String(groupKey)) ? '(Empty)' : String(groupKey)}
       </span>
     </div>
   );

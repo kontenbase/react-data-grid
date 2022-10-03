@@ -67,7 +67,7 @@ const sports = [
 ];
 
 const columns: readonly Column<Row>[] = [
-  // SelectColumn,
+  SelectColumn,
   {
     key: 'country',
     name: 'Country',
@@ -203,6 +203,7 @@ export default function Grouping({ direction }: Props) {
           }
           return 30;
         }}
+        groupPrimaryIndex={1}
       />
     </div>
   );
