@@ -56,7 +56,7 @@ export function useCalculatedColumns<R, SR>({
     const columns = rawColumns.map((rawColumn) => {
       const rowGroup = rawGroupBy?.includes(rawColumn.key) ?? false;
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      const frozen = rowGroup || rawColumn.frozen || false;
+      const frozen = rawColumn.frozen || false;
 
       const column: Mutable<CalculatedColumn<R, SR>> = {
         ...rawColumn,
@@ -89,13 +89,13 @@ export function useCalculatedColumns<R, SR>({
       if (bKey === SELECT_COLUMN_KEY) return 1;
 
       // Sort grouped columns second, following the groupBy order:
-      if (rawGroupBy?.includes(aKey)) {
-        if (rawGroupBy.includes(bKey)) {
-          return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
-        }
-        return -1;
-      }
-      if (rawGroupBy?.includes(bKey)) return 1;
+      // if (rawGroupBy?.includes(aKey)) {
+      //   if (rawGroupBy.includes(bKey)) {
+      //     return rawGroupBy.indexOf(aKey) - rawGroupBy.indexOf(bKey);
+      //   }
+      //   return -1;
+      // }
+      // if (rawGroupBy?.includes(bKey)) return 1;
 
       // Sort frozen columns third:
       if (frozenA) {
