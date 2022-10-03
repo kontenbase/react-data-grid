@@ -346,8 +346,7 @@ function DataGrid<R, SR, K extends Key>(
     isGroupRow,
     getRowTop,
     getRowHeight,
-    findRowIdx,
-    groupedRows
+    findRowIdx
   } = useViewportRows({
     rawRows,
     groupBy,
