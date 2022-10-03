@@ -61,7 +61,7 @@ export function airtableFormatter<R, SR>({
         style={{
           marginRight: 12,
           cursor: 'pointer',
-          rotate: isExpanded ? '270deg' : '0deg'
+          rotate: !isExpanded ? '270deg' : '0deg'
         }}
       >
         <path d={d} fill="currentColor" />
