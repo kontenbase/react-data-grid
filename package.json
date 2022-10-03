@@ -1,14 +1,7 @@
 {
-  "name": "react-data-grid",
-  "version": "7.0.0-beta.19",
-  "license": "MIT",
-  "description": "Feature-rich and customizable data grid React component",
-  "keywords": [
-    "react",
-    "data grid"
-  ],
-  "repository": "github:adazzle/react-data-grid",
-  "bugs": "https://github.com/adazzle/react-data-grid/issues",
+  "name": "@kontenbase/data-grid",
+  "version": "2.0.0",
+  "description": "Kontenbase Data Grid",
   "type": "module",
   "exports": {
     "./lib/styles.css": "./lib/styles.css",
@@ -28,6 +21,8 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "author": "Kontenbase",
+  "license": "MIT",
   "scripts": {
     "start": "webpack serve --mode=development",
     "build:website": "webpack --mode=production",
