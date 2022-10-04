@@ -21,18 +21,13 @@ const groupCellValue = css`
   top: 6px;
 `;
 
-interface CustomGroupFormatterProps<R, SR> extends GroupFormatterProps<R, SR> {
-  groupColumnIndex: number;
-  groupField: string;
-}
-
 export function airtableFormatter<R, SR>({
   groupColumnIndex,
   groupKey,
   groupField,
   isExpanded,
   toggleGroup
-}: CustomGroupFormatterProps<R, SR>) {
+}: GroupFormatterProps<R, SR>) {
   const d =
     'M0.71 1.71L3.3 4.3C3.69 4.69 4.32 4.69 4.71 4.3L7.3 1.71C7.93 1.08 7.48 0 6.59 0H1.41C0.52 0 0.08 1.08 0.71 1.71Z';
 

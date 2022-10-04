@@ -3,7 +3,7 @@ import { groupBy as rowGrouper } from 'lodash';
 import { css } from '@linaria/core';
 import { faker } from '@faker-js/faker';
 
-import DataGrid, { SelectColumn } from '../../src';
+import DataGrid, { SelectColumn, textEditor } from '../../src';
 import type { Column } from '../../src';
 import type { Props } from './types';
 
@@ -71,7 +71,8 @@ const columns: readonly Column<Row>[] = [
   {
     key: 'country',
     name: 'Country',
-    frozen: true
+    frozen: true,
+    editor: textEditor
   },
   {
     key: 'year',
@@ -204,6 +205,9 @@ export default function Grouping({ direction }: Props) {
           return 30;
         }}
         groupPrimaryIndex={1}
+        onRowsChange={(rows, data) => {
+          console.log({ row: rows[data.indexes[0]], data });
+        }}
       />
     </div>
   );
