@@ -92,6 +92,8 @@ export interface GroupFormatterProps<TRow, TSummaryRow = unknown> {
   isExpanded: boolean;
   isCellSelected: boolean;
   toggleGroup: () => void;
+  groupColumnIndex: number;
+  groupField: string;
 }
 
 export interface EditorProps<TRow, TSummaryRow = unknown> {
