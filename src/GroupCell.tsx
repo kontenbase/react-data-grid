@@ -43,7 +43,7 @@ function GroupCell<R, SR>({
   const isLevelMatching = column.idx === groupPrimaryIndex;
 
   const groupFormatter = React.useMemo(() => {
-    if (column.idx === groupPrimaryIndex) {
+    if (column.idx === groupPrimaryIndex && !column.groupFormatter) {
       return airtableFormatter;
     }
     return column.groupFormatter;
