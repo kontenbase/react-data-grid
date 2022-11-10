@@ -1,4 +1,12 @@
-import { forwardRef, useState, useRef, useImperativeHandle, useCallback, useMemo } from 'react';
+import {
+  forwardRef,
+  useState,
+  useRef,
+  useImperativeHandle,
+  useCallback,
+  useMemo,
+  useEffect
+} from 'react';
 import type { Key, RefAttributes } from 'react';
 import { flushSync } from 'react-dom';
 import clsx from 'clsx';
@@ -442,6 +450,24 @@ function DataGrid<R, SR, K extends Key>(
       scrollIntoView(rowRef.current);
     }
   });
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      const role = (event.target as HTMLDivElement).attributes.getNamedItem('role')?.value;
+      if (
+        (gridRef.current && !gridRef.current.contains(event.target as HTMLDivElement)) ||
+        role === 'grid'
+      ) {
+        setSelectedPosition(initialPosition);
+      }
+    };
+
+    document.addEventListener('click', handleClick, true);
+
+    return () => {
+      document.removeEventListener('click', handleClick, true);
+    };
+  }, [ref, gridRef]);
 
   useLayoutEffect(() => {
     if (!isWidthInitialized || flexWidthViewportColumns.length === 0) return;
