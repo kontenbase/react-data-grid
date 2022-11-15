@@ -205,9 +205,6 @@ export default function Grouping({ direction }: Props) {
           return 30;
         }}
         groupPrimaryIndex={1}
-        onRowsChange={(rows, data) => {
-          console.log({ row: rows[data.indexes[0]], data });
-        }}
       />
     </div>
   );
