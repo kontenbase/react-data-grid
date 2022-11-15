@@ -754,7 +754,7 @@ function DataGrid<R, SR, K extends Key>(
     }
 
     const column = columns[selectedPosition.idx];
-    column.editorOptions?.onCellKeyDown?.(event);
+    column.editorOptions?.onCellKeyDown?.(event, row);
     if (event.isDefaultPrevented()) return;
 
     if (isCellEditable(selectedPosition) && isDefaultCellInput(event)) {
