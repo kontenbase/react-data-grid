@@ -194,7 +194,7 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
    * Custom
    */
   groupPrimaryIndex?: number;
-  onBlur?: (e: MouseEvent) => boolean;
+  onBlur?: (e: MouseEvent, ref: HTMLDivElement | null, reset: () => void) => void;
 }
 
 /**
@@ -455,9 +455,10 @@ function DataGrid<R, SR, K extends Key>(
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      if (!onBlur || !onBlur(event)) return;
+      if (!onBlur || !gridRef.current) return;
 
-      setSelectedPosition(initialPosition);
+      const reset = () => setSelectedPosition(initialPosition);
+      onBlur(event, gridRef.current, reset);
     };
 
     document.addEventListener('click', handleClick, true);
