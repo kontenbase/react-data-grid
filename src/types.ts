@@ -45,7 +45,9 @@ export interface Column<TRow, TSummaryRow = unknown> {
     /** @default true */
     readonly commitOnOutsideClick?: Maybe<boolean>;
     /** Prevent default to cancel editing */
-    readonly onCellKeyDown?: Maybe<(event: React.KeyboardEvent<HTMLDivElement>) => void>;
+    readonly onCellKeyDown?: Maybe<
+      (event: React.KeyboardEvent<HTMLDivElement>, row?: TRow) => void
+    >;
     /** Control the default cell navigation behavior while the editor is open */
     readonly onNavigation?: Maybe<(event: React.KeyboardEvent<HTMLDivElement>) => boolean>;
   }>;
