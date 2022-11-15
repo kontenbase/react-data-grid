@@ -194,6 +194,7 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
    * Custom
    */
   groupPrimaryIndex?: number;
+  onBlur?: (e: MouseEvent) => boolean;
 }
 
 /**
@@ -252,7 +253,8 @@ function DataGrid<R, SR, K extends Key>(
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
     'aria-describedby': ariaDescribedBy,
-    'data-testid': testId
+    'data-testid': testId,
+    onBlur
   } = props;
 
   /**
@@ -453,13 +455,9 @@ function DataGrid<R, SR, K extends Key>(
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      const role = (event.target as HTMLDivElement).attributes.getNamedItem('role')?.value;
-      if (
-        (gridRef.current && !gridRef.current.contains(event.target as HTMLDivElement)) ||
-        role === 'grid'
-      ) {
-        setSelectedPosition(initialPosition);
-      }
+      if (!onBlur || !onBlur(event)) return;
+
+      setSelectedPosition(initialPosition);
     };
 
     document.addEventListener('click', handleClick, true);
@@ -467,7 +465,7 @@ function DataGrid<R, SR, K extends Key>(
     return () => {
       document.removeEventListener('click', handleClick, true);
     };
-  }, [ref, gridRef]);
+  }, [ref, gridRef, onBlur]);
 
   useLayoutEffect(() => {
     if (!isWidthInitialized || flexWidthViewportColumns.length === 0) return;
