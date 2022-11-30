@@ -200,7 +200,7 @@ export default function Grouping({ direction }: Props) {
         direction={direction}
         rowHeight={(arg) => {
           if (arg.type === 'GROUP') {
-            return 48;
+            return 68;
           }
           return 30;
         }}

@@ -92,7 +92,7 @@ function GroupedRow<R, SR>({
         onClick={handleSelectGroup}
         style={{
           ...getRowStyle(gridRowStart, height),
-          backgroundColor: bgColor[level] || '#f9f9f9'
+          backgroundColor: 'red'
         }}
         {...props}
       >

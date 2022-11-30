@@ -7,22 +7,21 @@ const groupCellContent = css`
   align-items: center;
   position: relative;
   height: 100%;
-  overflow: visible;
 `;
 
 const groupCellTitle = css`
   font-size: 11px;
   position: absolute;
-  top: -24px;
+  top: -18px;
 `;
 
 const groupCellValue = css`
   font-size: 14px;
   position: absolute;
-  top: -4px;
+  top: 0px;
 `;
 
-export function airtableFormatter<R, SR>({
+export function regularFormatter<R, SR>({
   groupColumnIndex,
   groupKey,
   groupField,
@@ -48,19 +47,15 @@ export function airtableFormatter<R, SR>({
     <div
       className={groupCellContent}
       style={{
-        marginLeft: `${groupColumnIndex - 1}rem`,
         backgroundColor: bgColor[groupColumnIndex - 1] || '#f9f9f9',
-        borderTopLeftRadius: 8,
-        paddingLeft: '1rem',
-        boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #cacaca`,
-        borderBottomLeftRadius: !isExpanded ? 8 : undefined,
-        borderBottom: !isExpanded ? '1px solid #cacaca' : undefined,
-        paddingBottom: isExpanded ? 10 : undefined
+        boxShadow: `0 -1px 0 #cacaca`,
+        // borderLeft: '1px solid #cacaca',
+        borderBottom: !isExpanded ? '1px solid #cacaca' : undefined
       }}
       tabIndex={-1}
       onKeyDown={handleKeyDown}
     >
-      <svg
+      {/* <svg
         onClick={toggleGroup}
         width="8"
         height="5"
@@ -85,7 +80,7 @@ export function airtableFormatter<R, SR>({
         }}
       >
         {['undefined', 'null'].includes(String(groupKey)) ? '(Empty)' : String(groupKey)}
-      </span>
+      </span> */}
     </div>
   );
 }
