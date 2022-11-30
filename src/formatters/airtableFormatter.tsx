@@ -17,18 +17,6 @@ const groupCellContent = css`
 
 const groupCellContentClassname = `rdg-group-cell-content ${groupCellContent}`;
 
-const groupCellTitle = css`
-  font-size: 11px;
-  position: absolute;
-  top: -24px;
-`;
-
-const groupCellValue = css`
-  font-size: 14px;
-  position: absolute;
-  top: -4px;
-`;
-
 export function airtableFormatter<R, SR>({
   groupColumnIndex,
   groupKey,

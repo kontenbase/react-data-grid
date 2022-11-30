@@ -118,8 +118,6 @@ export default function Grouping({ direction }: Props) {
   }
 
   const columns: readonly Column<Row>[] = useMemo(() => {
-    const groupLength = selectedOptions.length;
-
     return [
       SelectColumn,
       {
@@ -172,7 +170,7 @@ export default function Grouping({ direction }: Props) {
         // }
       }
     ];
-  }, [selectedOptions]);
+  }, []);
 
   return (
     <div className={groupingClassname}>
