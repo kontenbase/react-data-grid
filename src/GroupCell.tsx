@@ -90,7 +90,8 @@ function GroupCell<R, SR>({
         backgroundColor,
         boxShadow: groupColumnIndex > 1 && isLevelMatching ? '-1px 0 0 #cacaca' : undefined,
         borderTop: 0,
-        overflow: 'visible'
+        overflow: 'visible',
+        borderBottom: `1px solid ${backgroundColor}`
       }}
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}
@@ -105,7 +106,18 @@ function GroupCell<R, SR>({
           isCellSelected,
           toggleGroup,
           groupColumnIndex,
-          groupField
+          groupField,
+          children: column.groupFormatter?.({
+            groupKey,
+            childRows,
+            column,
+            row,
+            isExpanded,
+            isCellSelected,
+            toggleGroup,
+            groupColumnIndex,
+            groupField
+          })
         })}
 
       {isBeyondPrimaryIndex &&

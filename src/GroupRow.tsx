@@ -69,12 +69,6 @@ function GroupedRow<R, SR>({
     // selectGroup(rowIdx);
   }
 
-  const bgColor: Record<number, string> = {
-    0: '#E3E3E3',
-    1: '#EDEDED',
-    2: '#F7F7F7'
-  };
-
   return (
     <RowSelectionProvider value={isRowSelected}>
       <div
@@ -91,8 +85,7 @@ function GroupedRow<R, SR>({
         )}
         onClick={handleSelectGroup}
         style={{
-          ...getRowStyle(gridRowStart, height),
-          backgroundColor: 'red'
+          ...getRowStyle(gridRowStart, height)
         }}
         {...props}
       >

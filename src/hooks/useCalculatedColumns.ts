@@ -72,9 +72,9 @@ export function useCalculatedColumns<R, SR>({
         formatter: rawColumn.formatter ?? defaultFormatter
       };
 
-      if (rowGroup) {
-        column.groupFormatter ??= toggleGroupFormatter;
-      }
+      // if (rowGroup) {
+      //   column.groupFormatter ??= toggleGroupFormatter;
+      // }
 
       if (frozen) {
         lastFrozenColumnIndex++;

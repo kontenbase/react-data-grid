@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { groupBy as rowGrouper } from 'lodash';
 import { css } from '@linaria/core';
 import { faker } from '@faker-js/faker';
@@ -66,59 +66,6 @@ const sports = [
   'Weightlifting'
 ];
 
-const columns: readonly Column<Row>[] = [
-  SelectColumn,
-  {
-    key: 'country',
-    name: 'Country',
-    frozen: true,
-    editor: textEditor
-  },
-  {
-    key: 'year',
-    name: 'Year'
-  },
-  {
-    key: 'sport',
-    name: 'Sport'
-  },
-  {
-    key: 'athlete',
-    name: 'Athlete'
-  },
-  {
-    key: 'gold',
-    name: 'Gold'
-    // groupFormatter({ childRows }) {
-    //   return <>{childRows.reduce((prev, { gold }) => prev + gold, 0)}</>;
-    // }
-  },
-  {
-    key: 'silver',
-    name: 'Silver'
-    // groupFormatter({ childRows }) {
-    //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    // }
-  },
-  {
-    key: 'bronze',
-    name: 'Bronze'
-    // groupFormatter({ childRows }) {
-    //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
-    // }
-  },
-  {
-    key: 'total',
-    name: 'Total',
-    formatter({ row }) {
-      return <>{row.gold + row.silver + row.bronze}</>;
-    }
-    // groupFormatter({ childRows }) {
-    //   return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
-    // }
-  }
-];
-
 function rowKeyGetter(row: Row) {
   return row.id;
 }
@@ -169,6 +116,63 @@ export default function Grouping({ direction }: Props) {
     }
     setExpandedGroupIds(new Set());
   }
+
+  const columns: readonly Column<Row>[] = useMemo(() => {
+    const groupLength = selectedOptions.length;
+
+    return [
+      SelectColumn,
+      {
+        key: 'country',
+        name: 'Country',
+        frozen: true,
+        editor: textEditor
+      },
+      {
+        key: 'year',
+        name: 'Year'
+      },
+      {
+        key: 'sport',
+        name: 'Sport'
+      },
+      {
+        key: 'athlete',
+        name: 'Athlete'
+      },
+      {
+        key: 'gold',
+        name: 'Gold'
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { gold }) => prev + gold, 0)}</>;
+        // }
+      },
+      {
+        key: 'silver',
+        name: 'Silver'
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
+        // }
+      },
+      {
+        key: 'bronze',
+        name: 'Bronze'
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
+        // }
+      },
+      {
+        key: 'total',
+        name: 'Total',
+        formatter({ row }) {
+          return <>{row.gold + row.silver + row.bronze}</>;
+        }
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
+        // }
+      }
+    ];
+  }, [selectedOptions]);
 
   return (
     <div className={groupingClassname}>
