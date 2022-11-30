@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import type { CalculatedColumn, Column, Maybe } from '../types';
 import type { DataGridProps } from '../DataGrid';
-import { valueFormatter, toggleGroupFormatter } from '../formatters';
+import { valueFormatter } from '../formatters';
 import { SELECT_COLUMN_KEY } from '../Columns';
 import { clampColumnWidth, max, min } from '../utils';
 
