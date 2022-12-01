@@ -1,4 +1,5 @@
-import { memo } from 'react';
+import type { CSSProperties } from 'react';
+import { memo, useMemo } from 'react';
 import { css } from '@linaria/core';
 
 import { getCellStyle, getCellClassname, isCellEditable } from './utils';
@@ -37,6 +38,8 @@ function Cell<R, SR>({
   onRowDoubleClick,
   onRowChange,
   selectCell,
+  groupPrimaryIndex,
+  groupLength,
   ...props
 }: CellRendererProps<R, SR>) {
   const { ref, tabIndex, onFocus } = useRovingCellRef(isCellSelected);
@@ -73,6 +76,17 @@ function Cell<R, SR>({
     onRowChange(column, newRow);
   }
 
+  const additionalStyle: CSSProperties = useMemo(() => {
+    if (column.idx !== groupPrimaryIndex) return {};
+    return {
+      width: `calc(100% - ${!groupLength ? 0 : groupLength - 1}rem)`,
+      marginLeft: 'auto',
+      overflow: 'visible',
+      paddingLeft: '0.5rem',
+      paddingRight: '0.5rem'
+    };
+  }, [column.idx, groupPrimaryIndex, groupLength]);
+
   return (
     <div
       role="gridcell"
@@ -83,13 +97,53 @@ function Cell<R, SR>({
       ref={ref}
       tabIndex={tabIndex}
       className={className}
-      style={getCellStyle(column, colSpan)}
+      style={{
+        ...getCellStyle(column, colSpan),
+        backgroundColor: column.idx < groupPrimaryIndex ? '#E3E3E3' : undefined,
+        paddingLeft: column.idx === groupPrimaryIndex ? 0 : undefined,
+        paddingRight: column.idx === groupPrimaryIndex ? 0 : undefined,
+        boxShadow: `-1px 0 0 #cacaca`,
+        display: 'flex',
+        ...additionalStyle
+      }}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       onFocus={onFocus}
       {...props}
     >
+      {column.idx === groupPrimaryIndex && (
+        <>
+          {groupLength >= 2 && (
+            <div
+              style={{
+                width: '1rem',
+                height: '100%',
+                backgroundColor: '#E3E3E3',
+                position: 'absolute',
+                top: 0,
+                left: `-${groupLength - 1}rem`,
+                boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
+                borderRight: '1px solid #cacaca'
+              }}
+            />
+          )}
+          {groupLength === 3 && (
+            <div
+              style={{
+                width: '1rem',
+                height: '100%',
+                backgroundColor: '#ededed',
+                position: 'absolute',
+                top: 0,
+                left: '-1rem',
+                boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
+                borderRight: '1px solid #cacaca'
+              }}
+            />
+          )}
+        </>
+      )}
       {column.formatter({
         column,
         row,

@@ -30,6 +30,8 @@ function Row<R, SR>(
     onMouseEnter,
     onRowChange,
     selectCell,
+    groupPrimaryIndex,
+    groupLength,
     ...props
   }: RowRendererProps<R, SR>,
   ref: React.Ref<HTMLDivElement>
@@ -82,6 +84,8 @@ function Row<R, SR>(
           onRowDoubleClick={onRowDoubleClick}
           onRowChange={handleRowChange}
           selectCell={selectCell}
+          groupPrimaryIndex={groupPrimaryIndex}
+          groupLength={groupLength}
         />
       );
     }
