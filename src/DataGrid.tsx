@@ -1032,6 +1032,8 @@ function DataGrid<R, SR, K extends Key>(
         row={row}
         onRowChange={onRowChange}
         closeEditor={closeEditor}
+        groupPrimaryIndex={groupPrimaryIndex}
+        groupLength={groupBy.length}
       />
     );
   }
@@ -1163,7 +1165,9 @@ function DataGrid<R, SR, K extends Key>(
           onRowChange: handleFormatterRowChangeLatest,
           selectCell: selectViewportCellLatest,
           selectedCellDragHandle: getDragHandle(rowIdx),
-          selectedCellEditor: getCellEditor(rowIdx)
+          selectedCellEditor: getCellEditor(rowIdx),
+          groupPrimaryIndex,
+          groupLength: groupBy.length
         })
       );
     }

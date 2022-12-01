@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { css } from '@linaria/core';
 
 import { useLatestFunc } from './hooks';
@@ -33,6 +34,8 @@ interface EditCellProps<R, SR>
   extends Omit<EditorProps<R, SR>, 'onClose'>,
     SharedCellRendererProps<R, SR> {
   closeEditor: () => void;
+  groupPrimaryIndex: number;
+  groupLength: number;
 }
 
 export default function EditCell<R, SR>({
@@ -40,7 +43,9 @@ export default function EditCell<R, SR>({
   colSpan,
   row,
   onRowChange,
-  closeEditor
+  closeEditor,
+  groupLength,
+  groupPrimaryIndex
 }: EditCellProps<R, SR>) {
   const frameRequestRef = useRef<number | undefined>();
   const commitOnOutsideClick = column.editorOptions?.commitOnOutsideClick !== false;
@@ -103,6 +108,15 @@ export default function EditCell<R, SR>({
     typeof cellClass === 'function' ? cellClass(row) : cellClass
   );
 
+  const additionalStyle: CSSProperties = useMemo(() => {
+    if (column.idx !== groupPrimaryIndex) return {};
+    return {
+      width: `calc(100% - ${!groupLength ? 0 : groupLength - 1}rem)`,
+      marginLeft: 'auto',
+      overflow: 'visible'
+    };
+  }, [column.idx, groupPrimaryIndex, groupLength]);
+
   return (
     <div
       role="gridcell"
@@ -110,10 +124,50 @@ export default function EditCell<R, SR>({
       aria-colspan={colSpan}
       aria-selected
       className={className}
-      style={getCellStyle(column, colSpan)}
+      style={{
+        ...getCellStyle(column, colSpan),
+        backgroundColor: column.idx < groupPrimaryIndex ? '#E3E3E3' : undefined,
+        paddingLeft: column.idx === groupPrimaryIndex ? 0 : undefined,
+        paddingRight: column.idx === groupPrimaryIndex ? 0 : undefined,
+        boxShadow: `-1px 0 0 #cacaca`,
+        display: 'flex',
+        ...additionalStyle
+      }}
       onKeyDown={onKeyDown}
       onMouseDownCapture={commitOnOutsideClick ? cancelFrameRequest : undefined}
     >
+      {column.idx === groupPrimaryIndex && (
+        <>
+          {groupLength >= 2 && (
+            <div
+              style={{
+                width: '1rem',
+                height: '100%',
+                backgroundColor: '#E3E3E3',
+                position: 'absolute',
+                top: 0,
+                left: `-${groupLength - 1}rem`,
+                boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
+                borderRight: '1px solid #cacaca'
+              }}
+            />
+          )}
+          {groupLength === 3 && (
+            <div
+              style={{
+                width: '1rem',
+                height: '100%',
+                backgroundColor: '#ededed',
+                position: 'absolute',
+                top: 0,
+                left: '-1rem',
+                boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
+                borderRight: '1px solid #cacaca'
+              }}
+            />
+          )}
+        </>
+      )}
       {column.editor != null && (
         <>
           {column.editor({

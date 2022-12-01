@@ -129,6 +129,8 @@ export interface CellRendererProps<TRow, TSummaryRow>
   isCellSelected: boolean;
   dragHandle: ReactElement<React.HTMLAttributes<HTMLDivElement>> | undefined;
   onRowChange: (column: CalculatedColumn<TRow, TSummaryRow>, newRow: TRow) => void;
+  groupPrimaryIndex: number;
+  groupLength: number;
 }
 
 export interface RowRendererProps<TRow, TSummaryRow = unknown>
@@ -155,6 +157,8 @@ export interface RowRendererProps<TRow, TSummaryRow = unknown>
     column: CalculatedColumn<TRow, TSummaryRow>,
     enableEditor?: Maybe<boolean>
   ) => void;
+  groupPrimaryIndex: number;
+  groupLength: number;
 }
 
 export interface RowsChangeData<R, SR = unknown> {
