@@ -127,10 +127,6 @@ export default function EditCell<R, SR>({
       style={{
         ...getCellStyle(column, colSpan),
         backgroundColor: column.idx < groupPrimaryIndex && groupLength ? '#E3E3E3' : undefined,
-        paddingLeft: column.idx === groupPrimaryIndex ? 0 : undefined,
-        paddingRight: column.idx === groupPrimaryIndex ? 0 : undefined,
-        boxShadow: `-1px 0 0 #cacaca`,
-        display: 'flex',
         ...additionalStyle
       }}
       onKeyDown={onKeyDown}
