@@ -99,7 +99,7 @@ function Cell<R, SR>({
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor: column.idx < groupPrimaryIndex ? '#E3E3E3' : undefined,
+        backgroundColor: column.idx < groupPrimaryIndex && groupLength ? '#E3E3E3' : undefined,
         paddingLeft: column.idx === groupPrimaryIndex ? 0 : undefined,
         paddingRight: column.idx === groupPrimaryIndex ? 0 : undefined,
         boxShadow: `-1px 0 0 #cacaca`,
