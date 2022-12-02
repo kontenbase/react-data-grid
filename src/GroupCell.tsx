@@ -52,7 +52,8 @@ function GroupCell<R, SR>({
   const isBeyondPrimaryIndex = column.idx > groupPrimaryIndex;
 
   const backgroundColor = React.useMemo(() => {
-    if (isBehindPrimaryIndex || groupColumnIndex === 1) return getGroupBgColor(groupLength, 1);
+    if (isBehindPrimaryIndex || groupColumnIndex === 1)
+      return getGroupBgColor(groupLength, 1, false, true);
 
     return getGroupBgColor(groupLength, groupColumnIndex, true);
   }, [groupColumnIndex, isBehindPrimaryIndex, groupLength]);

@@ -45,17 +45,25 @@ export const bgColor: Record<number, string> = {
   3: '#F7F7F7'
 };
 
+export const tableBgColor: Record<number, string> = {
+  1: '#DEDEDE',
+  2: '#E8E8E8',
+  3: '#F2F2F2'
+};
+
 export const getGroupBgColor = (
   groupLength: number,
   groupColumnIndex: number,
-  isSpanElement?: boolean
+  isSpanElement?: boolean,
+  isBgTable?: boolean
 ): string => {
+  const bgConstant = isBgTable ? tableBgColor : bgColor;
   switch (groupLength) {
     case 2:
-      return !isSpanElement ? bgColor[groupColumnIndex + 1] : bgColor[groupColumnIndex];
+      return !isSpanElement ? bgConstant[groupColumnIndex + 1] : bgConstant[groupColumnIndex];
     case 3:
-      return !isSpanElement ? bgColor[groupColumnIndex] : bgColor[groupColumnIndex - 1];
+      return !isSpanElement ? bgConstant[groupColumnIndex] : bgConstant[groupColumnIndex - 1];
     default:
-      return bgColor[3];
+      return bgConstant[3];
   }
 };
