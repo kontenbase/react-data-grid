@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import { getCellStyle, getCellClassname } from './utils';
+import { getCellStyle, getCellClassname, getGroupBgColor } from './utils';
 import type { CalculatedColumn, GroupRow } from './types';
 import type { GroupRowRendererProps } from './GroupRow';
 import { useRovingCellRef } from './hooks';
@@ -19,6 +19,7 @@ interface GroupCellProps<R, SR> extends SharedGroupRowRendererProps<R, SR> {
   groupColumnIndex: number;
   groupField: string;
   groupPrimaryIndex: number;
+  groupLength: number;
 }
 
 function GroupCell<R, SR>({
@@ -32,6 +33,7 @@ function GroupCell<R, SR>({
   groupColumnIndex,
   groupField,
   groupPrimaryIndex,
+  groupLength,
   toggleGroup: toggleGroupWrapper
 }: GroupCellProps<R, SR>) {
   const { ref, tabIndex, onFocus } = useRovingCellRef(isCellSelected);
@@ -43,33 +45,17 @@ function GroupCell<R, SR>({
   // Only make the cell clickable if the group level matches
   const isLevelMatching = column.idx === groupPrimaryIndex;
 
-  // const groupFormatter = React.useMemo(() => {
-  //   if (column.idx === groupPrimaryIndex && !column.groupFormatter) {
-  //     return airtableFormatter;
-  //   }
-  //   return column.groupFormatter;
-  // }, [column.idx, column.groupFormatter, groupPrimaryIndex]);
-
   const isBehindPrimaryIndex = React.useMemo(
     () => column.idx < groupPrimaryIndex,
     [column.idx, groupPrimaryIndex]
   );
   const isBeyondPrimaryIndex = column.idx > groupPrimaryIndex;
 
-  const bgColor: Record<number, string> = React.useMemo(
-    () => ({
-      0: '#E3E3E3',
-      1: '#EDEDED',
-      2: '#F7F7F7'
-    }),
-    []
-  );
-
   const backgroundColor = React.useMemo(() => {
-    if (isBehindPrimaryIndex || groupColumnIndex === 1) return bgColor[0];
+    if (isBehindPrimaryIndex || groupColumnIndex === 1) return getGroupBgColor(groupLength, 1);
 
-    return bgColor[groupColumnIndex - 2] || '#f9f9f9';
-  }, [bgColor, groupColumnIndex, isBehindPrimaryIndex]);
+    return getGroupBgColor(groupLength, groupColumnIndex, true);
+  }, [groupColumnIndex, isBehindPrimaryIndex, groupLength]);
 
   return (
     <div
@@ -107,6 +93,7 @@ function GroupCell<R, SR>({
           toggleGroup,
           groupColumnIndex,
           groupField,
+          groupLength,
           children: column.groupFormatter?.({
             groupKey,
             childRows,
@@ -116,7 +103,8 @@ function GroupCell<R, SR>({
             isCellSelected,
             toggleGroup,
             groupColumnIndex,
-            groupField
+            groupField,
+            groupLength
           })
         })}
 
@@ -130,20 +118,9 @@ function GroupCell<R, SR>({
           isCellSelected,
           toggleGroup,
           groupColumnIndex,
-          groupField
+          groupField,
+          groupLength
         })}
-      {/* {column.idx >= groupPrimaryIndex &&
-        groupFormatter?.({
-          groupKey,
-          childRows,
-          column,
-          row,
-          isExpanded,
-          isCellSelected,
-          toggleGroup,
-          groupColumnIndex,
-          groupField
-        })} */}
     </div>
   );
 }

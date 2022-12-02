@@ -1,5 +1,7 @@
 import { css } from '@linaria/core';
+import type { PropsWithChildren } from 'react';
 import type { GroupFormatterProps } from '../types';
+import { getGroupBgColor } from '../utils';
 
 const groupCellContent = css`
   outline: none;
@@ -12,30 +14,41 @@ const groupCellContent = css`
 export function regularFormatter<R, SR>({
   groupColumnIndex,
   isExpanded,
-  toggleGroup
-}: GroupFormatterProps<R, SR>) {
+  toggleGroup,
+  groupLength,
+  children
+}: GroupFormatterProps<R, SR> & PropsWithChildren) {
   function handleKeyDown({ key }: React.KeyboardEvent<HTMLSpanElement>) {
     if (key === 'Enter') {
       toggleGroup();
     }
   }
 
-  const bgColor: Record<number, string> = {
-    0: '#E3E3E3',
-    1: '#EDEDED',
-    2: '#F7F7F7'
-  };
+  const backgroundColor = getGroupBgColor(groupLength, groupColumnIndex);
 
   return (
     <div
       className={groupCellContent}
       style={{
-        backgroundColor: bgColor[groupColumnIndex - 1] || '#f9f9f9',
+        backgroundColor,
         boxShadow: `0 -1px 0 #cacaca`,
         borderBottom: !isExpanded ? '1px solid #cacaca' : undefined
       }}
       tabIndex={-1}
       onKeyDown={handleKeyDown}
-    />
+    >
+      {children && (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          {children}
+        </div>
+      )}
+    </div>
   );
 }

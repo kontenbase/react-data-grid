@@ -108,7 +108,6 @@ export default function EditCell<R, SR>({
     typeof cellClass === 'function' ? cellClass(row) : cellClass
   );
 
-  const isBehindGroupColumn = column.idx < groupPrimaryIndex;
   const isGroupColumn = column.idx === groupPrimaryIndex;
 
   const additionalStyle: CSSProperties = useMemo(() => {
@@ -129,7 +128,6 @@ export default function EditCell<R, SR>({
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor: isBehindGroupColumn && groupLength ? '#E3E3E3' : undefined,
         ...additionalStyle
       }}
       onKeyDown={onKeyDown}

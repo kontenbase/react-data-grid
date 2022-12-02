@@ -1110,6 +1110,7 @@ function DataGrid<R, SR, K extends Key>(
             id={row.id}
             groupKey={row.groupKey}
             groupField={groupBy[row.level]}
+            groupLength={groupBy.length}
             viewportColumns={rowColumns}
             groupPrimaryIndex={groupPrimaryIndex}
             childRows={row.childRows}

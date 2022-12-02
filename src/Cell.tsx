@@ -2,10 +2,9 @@ import type { CSSProperties } from 'react';
 import { memo, useMemo } from 'react';
 import { css } from '@linaria/core';
 
-import { getCellStyle, getCellClassname, isCellEditable } from './utils';
+import { getCellStyle, getCellClassname, isCellEditable, getGroupBgColor } from './utils';
 import type { CellRendererProps } from './types';
 import { useRovingCellRef } from './hooks';
-import { cell } from './style';
 
 const cellCopied = css`
   @layer rdg.Cell {
@@ -102,7 +101,8 @@ function Cell<R, SR>({
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor: isBehindGroupColumn && groupLength ? '#E3E3E3' : undefined,
+        backgroundColor:
+          isBehindGroupColumn && groupLength ? getGroupBgColor(groupLength, 1) : undefined,
         ...additionalStyle
       }}
       onClick={handleClick}
@@ -118,7 +118,7 @@ function Cell<R, SR>({
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#E3E3E3',
+                backgroundColor: getGroupBgColor(groupLength, 1),
                 boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
                 borderRight: '1px solid #cacaca'
               }}
@@ -129,7 +129,7 @@ function Cell<R, SR>({
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#ededed',
+                backgroundColor: getGroupBgColor(groupLength, groupLength - 1),
                 boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
                 borderRight: '1px solid #cacaca'
               }}
