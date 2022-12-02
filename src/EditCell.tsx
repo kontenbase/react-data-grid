@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { css } from '@linaria/core';
 
 import { useLatestFunc } from './hooks';
-import { getCellStyle, getCellClassname, onEditorNavigation } from './utils';
+import { getCellStyle, getCellClassname, onEditorNavigation, getGroupBgColor } from './utils';
 import type { CellRendererProps, EditorProps, Omit } from './types';
 
 /*
@@ -140,7 +140,7 @@ export default function EditCell<R, SR>({
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#E3E3E3',
+                backgroundColor: getGroupBgColor(groupLength, 1),
                 boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
                 borderRight: '1px solid #cacaca',
                 flexShrink: 0
@@ -152,7 +152,7 @@ export default function EditCell<R, SR>({
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#ededed',
+                backgroundColor: getGroupBgColor(groupLength, groupLength - 1),
                 boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
                 borderRight: '1px solid #cacaca',
                 flexShrink: 0
