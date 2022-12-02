@@ -124,7 +124,10 @@ export default function Grouping({ direction }: Props) {
         key: 'country',
         name: 'Country',
         frozen: true,
-        editor: textEditor
+        editor: textEditor,
+        formatter() {
+          return <div>awoekaoekoawekoawkeoawkeoakweoaewkoawke</div>;
+        }
       },
       {
         key: 'year',

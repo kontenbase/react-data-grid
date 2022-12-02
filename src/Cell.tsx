@@ -120,7 +120,8 @@ function Cell<R, SR>({
                 height: '100%',
                 backgroundColor: getGroupBgColor(groupLength, 1),
                 boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
-                borderRight: '1px solid #cacaca'
+                borderRight: '1px solid #cacaca',
+                flexShrink: 0
               }}
             />
           )}
@@ -131,7 +132,8 @@ function Cell<R, SR>({
                 height: '100%',
                 backgroundColor: getGroupBgColor(groupLength, groupLength - 1),
                 boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
-                borderRight: '1px solid #cacaca'
+                borderRight: '1px solid #cacaca',
+                flexShrink: 0
               }}
             />
           )}
@@ -141,6 +143,9 @@ function Cell<R, SR>({
               flex-grow: 1;
               padding-left: 0.5rem;
               padding-right: 0.5rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
               &[aria-selected='true'] {
                 outline: 2px solid var(--rdg-selection-color);
                 outline-offset: -2px;
