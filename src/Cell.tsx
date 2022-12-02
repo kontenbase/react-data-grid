@@ -89,6 +89,11 @@ function Cell<R, SR>({
     };
   }, [isGroupColumn]);
 
+  const tableBackground = useMemo(
+    () => getGroupBgColor(groupLength, 1, false, true),
+    [groupLength]
+  );
+
   return (
     <div
       role="gridcell"
@@ -101,10 +106,8 @@ function Cell<R, SR>({
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor:
-          isBehindGroupColumn && groupLength
-            ? getGroupBgColor(groupLength, 1, false, true)
-            : undefined,
+        backgroundColor: isBehindGroupColumn && groupLength ? tableBackground : undefined,
+        borderBottom: isBehindGroupColumn && groupLength ? tableBackground : undefined,
         ...additionalStyle
       }}
       onClick={handleClick}
