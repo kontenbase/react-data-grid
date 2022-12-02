@@ -89,6 +89,11 @@ function Cell<R, SR>({
     };
   }, [isGroupColumn]);
 
+  const tableBackground = useMemo(
+    () => getGroupBgColor(groupLength, 1, false, true),
+    [groupLength]
+  );
+
   return (
     <div
       role="gridcell"
@@ -101,10 +106,8 @@ function Cell<R, SR>({
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor:
-          isBehindGroupColumn && groupLength
-            ? getGroupBgColor(groupLength, 1, false, true)
-            : undefined,
+        backgroundColor: isBehindGroupColumn && groupLength ? tableBackground : undefined,
+        borderBottom: isBehindGroupColumn && groupLength ? tableBackground : undefined,
         ...additionalStyle
       }}
       onClick={handleClick}
@@ -121,7 +124,10 @@ function Cell<R, SR>({
                 width: '1rem',
                 height: '100%',
                 backgroundColor: getGroupBgColor(groupLength, 1),
-                boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
+                boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 ${getGroupBgColor(
+                  groupLength,
+                  1
+                )}, 0 1px 0 ${getGroupBgColor(groupLength, 1)}`,
                 borderRight: '1px solid #cacaca',
                 flexShrink: 0
               }}
@@ -133,7 +139,10 @@ function Cell<R, SR>({
                 width: '1rem',
                 height: '100%',
                 backgroundColor: getGroupBgColor(groupLength, groupLength - 1),
-                boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
+                boxShadow: `0 -1px 0 ${getGroupBgColor(
+                  groupLength,
+                  groupLength - 1
+                )}, 0 1px 0 ${getGroupBgColor(groupLength, groupLength - 1)}`,
                 borderRight: '1px solid #cacaca',
                 flexShrink: 0
               }}
@@ -147,6 +156,7 @@ function Cell<R, SR>({
               padding-right: 0.5rem;
               overflow: hidden;
               text-overflow: ellipsis;
+              box-shadow: -1px 0 0 #cacaca;
 
               &[aria-selected='true'] {
                 outline: 2px solid var(--rdg-selection-color);
