@@ -147,6 +147,7 @@ function Cell<R, SR>({
               padding-right: 0.5rem;
               overflow: hidden;
               text-overflow: ellipsis;
+              box-shadow: -1px 0 0 #cacaca;
 
               &[aria-selected='true'] {
                 outline: 2px solid var(--rdg-selection-color);
