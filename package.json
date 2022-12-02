@@ -1,6 +1,6 @@
 {
   "name": "@kontenbase/data-grid",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "Kontenbase Data Grid",
   "type": "module",
   "exports": {
