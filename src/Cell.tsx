@@ -102,7 +102,9 @@ function Cell<R, SR>({
       style={{
         ...getCellStyle(column, colSpan),
         backgroundColor:
-          isBehindGroupColumn && groupLength ? getGroupBgColor(groupLength, 1) : undefined,
+          isBehindGroupColumn && groupLength
+            ? getGroupBgColor(groupLength, 1, false, true)
+            : undefined,
         ...additionalStyle
       }}
       onClick={handleClick}
