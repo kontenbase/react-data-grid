@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { css } from '@linaria/core';
 
 import { useLatestFunc } from './hooks';
-import { getCellStyle, getCellClassname, onEditorNavigation } from './utils';
+import { getCellStyle, getCellClassname, onEditorNavigation, getGroupBgColor } from './utils';
 import type { CellRendererProps, EditorProps, Omit } from './types';
 
 /*
@@ -108,43 +108,42 @@ export default function EditCell<R, SR>({
     typeof cellClass === 'function' ? cellClass(row) : cellClass
   );
 
+  const isGroupColumn = column.idx === groupPrimaryIndex;
+
   const additionalStyle: CSSProperties = useMemo(() => {
-    if (column.idx !== groupPrimaryIndex) return {};
+    if (!isGroupColumn) return {};
     return {
-      width: `calc(100% - ${!groupLength ? 0 : groupLength - 1}rem)`,
-      marginLeft: 'auto',
+      paddingLeft: '0',
+      paddingRight: '0',
+      display: 'flex',
       overflow: 'visible'
     };
-  }, [column.idx, groupPrimaryIndex, groupLength]);
+  }, [isGroupColumn]);
 
   return (
     <div
       role="gridcell"
       aria-colindex={column.idx + 1} // aria-colindex is 1-based
       aria-colspan={colSpan}
-      aria-selected
       className={className}
       style={{
         ...getCellStyle(column, colSpan),
-        backgroundColor: column.idx < groupPrimaryIndex && groupLength ? '#E3E3E3' : undefined,
         ...additionalStyle
       }}
       onKeyDown={onKeyDown}
       onMouseDownCapture={commitOnOutsideClick ? cancelFrameRequest : undefined}
     >
-      {column.idx === groupPrimaryIndex && (
+      {isGroupColumn && (
         <>
           {groupLength >= 2 && (
             <div
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#E3E3E3',
-                position: 'absolute',
-                top: 0,
-                left: `-${groupLength - 1}rem`,
+                backgroundColor: getGroupBgColor(groupLength, 1),
                 boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #E3E3E3, 0 1px 0 #E3E3E3`,
-                borderRight: '1px solid #cacaca'
+                borderRight: '1px solid #cacaca',
+                flexShrink: 0
               }}
             />
           )}
@@ -153,18 +152,42 @@ export default function EditCell<R, SR>({
               style={{
                 width: '1rem',
                 height: '100%',
-                backgroundColor: '#ededed',
-                position: 'absolute',
-                top: 0,
-                left: '-1rem',
+                backgroundColor: getGroupBgColor(groupLength, groupLength - 1),
                 boxShadow: `0 -1px 0 #ededed, 0 1px 0 #ededed`,
-                borderRight: '1px solid #cacaca'
+                borderRight: '1px solid #cacaca',
+                flexShrink: 0
               }}
             />
           )}
+          <div
+            aria-selected
+            className={css`
+              flex-grow: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+
+              &[aria-selected='true'] {
+                outline: 2px solid var(--rdg-selection-color);
+                outline-offset: -2px;
+              }
+            `}
+          >
+            {column.editor != null && (
+              <>
+                {column.editor({
+                  column,
+                  row,
+                  onRowChange,
+                  onClose
+                })}
+                {column.editorOptions?.renderFormatter &&
+                  column.formatter({ column, row, isCellSelected: true, onRowChange })}
+              </>
+            )}
+          </div>
         </>
       )}
-      {column.editor != null && (
+      {column.editor != null && !isGroupColumn && (
         <>
           {column.editor({
             column,

@@ -1,6 +1,7 @@
 import { css } from '@linaria/core';
 import type { PropsWithChildren } from 'react';
 import type { GroupFormatterProps } from '../types';
+import { getGroupBgColor } from '../utils';
 
 const groupCellContent = css`
   outline: none;
@@ -23,7 +24,8 @@ export function airtableFormatter<R, SR>({
   groupField,
   isExpanded,
   toggleGroup,
-  children
+  children,
+  groupLength
 }: GroupFormatterProps<R, SR> & PropsWithChildren) {
   const d =
     'M0.71 1.71L3.3 4.3C3.69 4.69 4.32 4.69 4.71 4.3L7.3 1.71C7.93 1.08 7.48 0 6.59 0H1.41C0.52 0 0.08 1.08 0.71 1.71Z';
@@ -34,18 +36,15 @@ export function airtableFormatter<R, SR>({
     }
   }
 
-  const bgColor: Record<number, string> = {
-    0: '#E3E3E3',
-    1: '#EDEDED',
-    2: '#F7F7F7'
-  };
+  const backgroundColor = getGroupBgColor(groupLength, groupColumnIndex);
+  const spanElementBgColor = getGroupBgColor(groupLength, 2, true);
 
   return (
     <div
       className={groupCellContentClassname}
       style={{
         marginLeft: `${groupColumnIndex - 1}rem`,
-        backgroundColor: bgColor[groupColumnIndex - 1] || '#f9f9f9',
+        backgroundColor,
         borderTopLeftRadius: 8,
         paddingLeft: '1rem',
         boxShadow: `-1px 0 0 #cacaca, 0 -1px 0 #cacaca`,
@@ -61,7 +60,7 @@ export function airtableFormatter<R, SR>({
           style={{
             width: '1rem',
             height: 68,
-            backgroundColor: bgColor[0],
+            backgroundColor: spanElementBgColor,
             position: 'absolute',
             top: -10,
             left: '-2rem',

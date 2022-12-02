@@ -96,6 +96,7 @@ export interface GroupFormatterProps<TRow, TSummaryRow = unknown> {
   toggleGroup: () => void;
   groupColumnIndex: number;
   groupField: string;
+  groupLength: number;
 }
 
 export interface EditorProps<TRow, TSummaryRow = unknown> {
