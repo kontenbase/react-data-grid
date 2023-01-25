@@ -1,6 +1,5 @@
 import { css } from '@linaria/core';
 import type { PropsWithChildren } from 'react';
-import { useMemo } from 'react';
 import type { GroupFormatterProps } from '../types';
 import { bgColor, getGroupBgColor } from '../utils';
 
