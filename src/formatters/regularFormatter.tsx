@@ -88,6 +88,7 @@ export function regularFormatter<R, SR>({
         firstSpanStyle.borderRight = '1px solid #cacaca';
         firstSpanStyle.top = 0;
         firstSpanStyle.borderTopRightRadius = 8;
+
         break;
 
       case 2:
@@ -102,7 +103,7 @@ export function regularFormatter<R, SR>({
     }
   }
 
-  if (isLastGroupColumn)
+  if (isLastGroupColumn && groupLength >= 2)
     return (
       <div className={groupCellContent}>
         {groupLength >= 2 && <div style={firstSpanStyle} />}
@@ -110,11 +111,8 @@ export function regularFormatter<R, SR>({
       </div>
     );
 
-  const isRequireAdditionalStyle =
-    isLastColumn &&
-    (groupColumnIndex === 3 ||
-      (groupLength === 2 && groupColumnIndex === 2) ||
-      (groupLength === 1 && groupColumnIndex === 1));
+  const isShowRadius = isLastColumn && (groupColumnIndex === 3 || groupLength === groupColumnIndex);
+  const isShowBorderRight = isLastColumn && groupLength >= 2 && groupLength === groupColumnIndex;
 
   return (
     <div
@@ -123,8 +121,8 @@ export function regularFormatter<R, SR>({
         backgroundColor,
         boxShadow: `0 -1px 0 #cacaca`,
         borderBottom: !isExpanded ? '1px solid #cacaca' : undefined,
-        borderTopRightRadius: isRequireAdditionalStyle ? 8 : 0,
-        borderRight: isRequireAdditionalStyle ? '1px solid #cacaca' : undefined
+        borderTopRightRadius: isShowRadius ? 8 : 0,
+        borderRight: isShowBorderRight ? '1px solid #cacaca' : undefined
       }}
       tabIndex={-1}
       onKeyDown={handleKeyDown}

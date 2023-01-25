@@ -74,9 +74,8 @@ function GroupCell<R, SR>({
     }
   }
 
-  if (isLastGroupColumn) console.log({ groupColumnIndex });
-
   if (isNoStyling) return null;
+  if (isLastGroupColumn && groupLength <= 1) return null;
 
   return (
     <div
