@@ -78,22 +78,28 @@ function Cell<R, SR>({
 
   const isBehindGroupColumn = column.idx < groupPrimaryIndex;
   const isGroupColumn = column.idx === groupPrimaryIndex;
+  const isLastGroupColumn = column.isLastGroupColumn ?? false;
 
   const additionalStyle: CSSProperties = useMemo(() => {
-    if (!isGroupColumn) return {};
-    return {
+    if (!isGroupColumn && !isLastGroupColumn) return {};
+    let obj: CSSProperties = {
       paddingLeft: '0',
       paddingRight: '0',
       display: 'flex',
       overflow: 'visible'
     };
-  }, [isGroupColumn]);
+
+    if (isLastGroupColumn) {
+      obj = { ...obj, width: '2rem' };
+    }
+
+    return obj;
+  }, [isGroupColumn, isLastGroupColumn]);
 
   const tableBackground = useMemo(
     () => getGroupBgColor(groupLength, 1, false, true),
     [groupLength]
   );
-  const isLastColumn = column.isLastColumn ?? false;
 
   const isNoStyling = column.isNoStyling ?? false;
   if (isNoStyling) return null;
@@ -178,7 +184,27 @@ function Cell<R, SR>({
           </div>
         </>
       )}
+      {isLastGroupColumn && (
+        <div
+          aria-selected={isCellSelected}
+          className={css`
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: -1px 0 0 #cacaca;
+            background-color: red;
+
+            &[aria-selected='true'] {
+              outline: 2px solid transparent;
+            }
+          `}
+        >
+          <div />
+        </div>
+      )}
       {!isGroupColumn &&
+        !isLastGroupColumn &&
         column.formatter({
           column,
           row,

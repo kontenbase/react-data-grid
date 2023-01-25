@@ -59,6 +59,23 @@ function GroupCell<R, SR>({
   }, [groupColumnIndex, isBehindPrimaryIndex, groupLength]);
 
   const isNoStyling = column.isNoStyling ?? false;
+  const isLastGroupColumn = column.isLastGroupColumn ?? false;
+
+  let width;
+  if (isLastGroupColumn) {
+    if (groupLength === 1) {
+      width = '0';
+    }
+    if (groupLength === 2) {
+      width = '1rem';
+    }
+    if (groupLength === 3) {
+      width = '2rem';
+    }
+  }
+
+  if (isLastGroupColumn) console.log({ groupColumnIndex });
+
   if (isNoStyling) return null;
 
   return (
@@ -81,7 +98,8 @@ function GroupCell<R, SR>({
         boxShadow: groupColumnIndex > 1 && isLevelMatching ? '-1px 0 0 #cacaca' : undefined,
         borderTop: 0,
         overflow: 'visible',
-        borderBottom: `1px solid ${backgroundColor}`
+        borderBottom: `1px solid ${backgroundColor}`,
+        width
       }}
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}
