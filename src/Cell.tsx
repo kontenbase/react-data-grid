@@ -93,6 +93,10 @@ function Cell<R, SR>({
     () => getGroupBgColor(groupLength, 1, false, true),
     [groupLength]
   );
+  const isLastColumn = column.isLastColumn ?? false;
+
+  const isNoStyling = column.isNoStyling ?? false;
+  if (isNoStyling) return null;
 
   return (
     <div

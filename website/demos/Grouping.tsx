@@ -164,9 +164,21 @@ export default function Grouping({ direction }: Props) {
         name: 'Total',
         formatter({ row }) {
           return <>{row.gold + row.silver + row.bronze}</>;
-        }
+        },
+        isLastColumn: true,
+        cellClass: css`
+          box-shadow: inset -1px 0 0 #cacaca;
+        `
         // groupFormatter({ childRows }) {
         //   return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
+        // }
+      },
+      {
+        key: 'dummy',
+        name: 'dummy',
+        isNoStyling: true
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
         // }
       }
     ];
@@ -207,6 +219,7 @@ export default function Grouping({ direction }: Props) {
           return 30;
         }}
         groupPrimaryIndex={1}
+        style={{ backgroundColor: '#DEDEDE' }}
       />
     </div>
   );

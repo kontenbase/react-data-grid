@@ -58,6 +58,9 @@ function GroupCell<R, SR>({
     return getGroupBgColor(groupLength, groupColumnIndex, true);
   }, [groupColumnIndex, isBehindPrimaryIndex, groupLength]);
 
+  const isNoStyling = column.isNoStyling ?? false;
+  if (isNoStyling) return null;
+
   return (
     <div
       role="gridcell"
