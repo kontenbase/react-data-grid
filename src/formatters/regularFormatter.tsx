@@ -16,7 +16,8 @@ export function regularFormatter<R, SR>({
   isExpanded,
   toggleGroup,
   groupLength,
-  children
+  children,
+  column
 }: GroupFormatterProps<R, SR> & PropsWithChildren) {
   function handleKeyDown({ key }: React.KeyboardEvent<HTMLSpanElement>) {
     if (key === 'Enter') {
@@ -25,6 +26,7 @@ export function regularFormatter<R, SR>({
   }
 
   const backgroundColor = getGroupBgColor(groupLength, groupColumnIndex);
+  const isLastColumn = column.isLastColumn ?? false;
 
   return (
     <div
@@ -32,7 +34,9 @@ export function regularFormatter<R, SR>({
       style={{
         backgroundColor,
         boxShadow: `0 -1px 0 #cacaca`,
-        borderBottom: !isExpanded ? '1px solid #cacaca' : undefined
+        borderBottom: !isExpanded ? '1px solid #cacaca' : undefined,
+        borderTopRightRadius: isLastColumn ? 8 : undefined,
+        borderRight: isLastColumn ? '1px solid #cacaca' : undefined
       }}
       tabIndex={-1}
       onKeyDown={handleKeyDown}
