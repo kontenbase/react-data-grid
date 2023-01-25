@@ -53,6 +53,7 @@ export interface Column<TRow, TSummaryRow = unknown> {
   }>;
   /** Header renderer for each header cell */
   readonly headerRenderer?: Maybe<(props: HeaderRendererProps<TRow, TSummaryRow>) => ReactNode>;
+  readonly isLastColumn?: Maybe<boolean>;
 }
 
 export interface CalculatedColumn<TRow, TSummaryRow = unknown> extends Column<TRow, TSummaryRow> {
