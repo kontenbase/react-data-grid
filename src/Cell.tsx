@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { memo, useMemo } from 'react';
 import { css } from '@linaria/core';
 
-import { getCellStyle, getCellClassname, isCellEditable, getGroupBgColor } from './utils';
+import { getCellStyle, getCellClassname, isCellEditable, getGroupBgColor, bgColor } from './utils';
 import type { CellRendererProps } from './types';
 import { useRovingCellRef } from './hooks';
 
@@ -78,21 +78,38 @@ function Cell<R, SR>({
 
   const isBehindGroupColumn = column.idx < groupPrimaryIndex;
   const isGroupColumn = column.idx === groupPrimaryIndex;
+  const isLastGroupColumn = column.isLastGroupColumn ?? false;
 
   const additionalStyle: CSSProperties = useMemo(() => {
-    if (!isGroupColumn) return {};
-    return {
+    if (!isGroupColumn && !isLastGroupColumn) return {};
+    let obj: CSSProperties = {
       paddingLeft: '0',
       paddingRight: '0',
       display: 'flex',
       overflow: 'visible'
     };
-  }, [isGroupColumn]);
+
+    if (isLastGroupColumn) {
+      obj = {
+        ...obj,
+        width: `${groupLength - 1}rem`,
+        borderBottom: 'none'
+        // borderRight: '1px solid #cacaca'
+      };
+    }
+
+    return obj;
+  }, [isGroupColumn, isLastGroupColumn, groupLength]);
 
   const tableBackground = useMemo(
     () => getGroupBgColor(groupLength, 1, false, true),
     [groupLength]
   );
+
+  const isNoStyling = column.isNoStyling ?? false;
+  if (isNoStyling) return null;
+
+  if (isLastGroupColumn && groupLength <= 1) return null;
 
   return (
     <div
@@ -174,7 +191,34 @@ function Cell<R, SR>({
           </div>
         </>
       )}
+      {isLastGroupColumn && (
+        <>
+          {groupLength >= 2 && (
+            <div
+              style={{
+                backgroundColor: bgColor[2],
+                width: '1rem',
+                height: '100%',
+                // borderRight: groupLength === 3 ? '1px solid #cacaca' : undefined
+                boxShadow: groupLength === 2 ? `1px 0 0 #cacaca` : undefined
+              }}
+            />
+          )}
+          {groupLength === 3 && (
+            <div
+              style={{
+                backgroundColor: bgColor[1],
+                width: '1rem',
+                height: '100%',
+                boxShadow: `1px 0 0 #cacaca`,
+                borderLeft: '1px solid #cacaca'
+              }}
+            />
+          )}
+        </>
+      )}
       {!isGroupColumn &&
+        !isLastGroupColumn &&
         column.formatter({
           column,
           row,

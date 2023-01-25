@@ -58,6 +58,25 @@ function GroupCell<R, SR>({
     return getGroupBgColor(groupLength, groupColumnIndex, true);
   }, [groupColumnIndex, isBehindPrimaryIndex, groupLength]);
 
+  const isNoStyling = column.isNoStyling ?? false;
+  const isLastGroupColumn = column.isLastGroupColumn ?? false;
+
+  let width;
+  if (isLastGroupColumn) {
+    if (groupLength === 1) {
+      width = '0';
+    }
+    if (groupLength === 2) {
+      width = '1rem';
+    }
+    if (groupLength === 3) {
+      width = '2rem';
+    }
+  }
+
+  if (isNoStyling) return null;
+  if (isLastGroupColumn && groupLength <= 1) return null;
+
   return (
     <div
       role="gridcell"
@@ -78,7 +97,8 @@ function GroupCell<R, SR>({
         boxShadow: groupColumnIndex > 1 && isLevelMatching ? '-1px 0 0 #cacaca' : undefined,
         borderTop: 0,
         overflow: 'visible',
-        borderBottom: `1px solid ${backgroundColor}`
+        borderBottom: `1px solid ${backgroundColor}`,
+        width
       }}
       onClick={isLevelMatching ? toggleGroup : undefined}
       onFocus={onFocus}

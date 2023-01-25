@@ -43,6 +43,7 @@ export function airtableFormatter<R, SR>({
     <div
       className={groupCellContentClassname}
       style={{
+        paddingTop: 10,
         marginLeft: `${groupColumnIndex - 1}rem`,
         backgroundColor,
         borderTopLeftRadius: 8,

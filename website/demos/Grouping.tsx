@@ -164,13 +164,38 @@ export default function Grouping({ direction }: Props) {
         name: 'Total',
         formatter({ row }) {
           return <>{row.gold + row.silver + row.bronze}</>;
-        }
+        },
+        isLastColumn: true
         // groupFormatter({ childRows }) {
         //   return <>{childRows.reduce((prev, row) => prev + row.gold + row.silver + row.bronze, 0)}</>;
+        // }
+      },
+      {
+        key: 'dummy',
+        name: 'dummy',
+        isLastGroupColumn: true
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
+        // }
+      },
+      {
+        key: 'dummy2',
+        name: 'dummy2',
+        isNoStyling: true
+
+        // groupFormatter({ childRows }) {
+        //   return <>{childRows.reduce((prev, { silver }) => prev + silver, 0)}</>;
         // }
       }
     ];
   }, []);
+
+  const gridviewBgColor: Record<number, string> = {
+    0: '#F7F7F7',
+    1: '#F2F2F2',
+    2: '#E8E8E8',
+    3: '#DEDEDE'
+  };
 
   return (
     <div className={groupingClassname}>
@@ -207,6 +232,7 @@ export default function Grouping({ direction }: Props) {
           return 30;
         }}
         groupPrimaryIndex={1}
+        style={{ backgroundColor: gridviewBgColor[selectedOptions.length] }}
       />
     </div>
   );
