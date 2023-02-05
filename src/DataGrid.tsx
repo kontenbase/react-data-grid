@@ -458,7 +458,7 @@ function DataGrid<R, SR, K extends Key>(
     const handleClick = (event: MouseEvent) => {
       if (!onBlur || !gridRef.current) return;
 
-      const reset = () => setSelectedPosition(initialPosition);
+      const reset = () => setSelectedPosition({ idx: -1, rowIdx: minRowIdx - 1, mode: 'SELECT' });
       onBlur(event, gridRef.current, reset);
     };
 
