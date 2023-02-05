@@ -1,10 +1,17 @@
 import type { CSSProperties } from 'react';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, type MutableRefObject, useCallback } from 'react';
 import { css } from '@linaria/core';
 
 import { useLatestFunc } from './hooks';
-import { getCellStyle, getCellClassname, onEditorNavigation, getGroupBgColor } from './utils';
-import type { CellRendererProps, EditorProps, Omit } from './types';
+import { getCellStyle, getCellClassname, onEditorNavigation, createCellEvent, getGroupBgColor } from './utils';
+import type {
+  CellKeyboardEvent,
+  CellRendererProps,
+  EditCellKeyDownArgs,
+  EditorProps,
+  Maybe,
+  Omit
+} from './types';
 
 /*
  * To check for outside `mousedown` events, we listen to all `mousedown` events at their birth,
@@ -33,7 +40,11 @@ type SharedCellRendererProps<R, SR> = Pick<CellRendererProps<R, SR>, 'colSpan'>;
 interface EditCellProps<R, SR>
   extends Omit<EditorProps<R, SR>, 'onClose'>,
     SharedCellRendererProps<R, SR> {
+  rowIdx: number;
+  skipCellFocusRef: MutableRefObject<boolean>;
   closeEditor: () => void;
+  navigate: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onKeyDown: Maybe<(args: EditCellKeyDownArgs<R, SR>, event: CellKeyboardEvent) => void>;
   groupPrimaryIndex: number;
   groupLength: number;
 }
@@ -42,8 +53,12 @@ export default function EditCell<R, SR>({
   column,
   colSpan,
   row,
+  rowIdx,
+  skipCellFocusRef,
   onRowChange,
   closeEditor,
+  onKeyDown,
+  navigate,
   groupLength,
   groupPrimaryIndex
 }: EditCellProps<R, SR>) {
@@ -57,11 +72,19 @@ export default function EditCell<R, SR>({
     onClose(true);
   });
 
-  useEffect(() => {
-    if (!commitOnOutsideClick) return;
+  const cancelFrameRequest = useCallback(() => {
+    skipCellFocusRef.current = false;
+    if (commitOnOutsideClick) {
+      cancelAnimationFrame(frameRequestRef.current!);
+    }
+  }, [commitOnOutsideClick, skipCellFocusRef]);
 
+  useEffect(() => {
     function onWindowCaptureMouseDown() {
-      frameRequestRef.current = requestAnimationFrame(commitOnOutsideMouseDown);
+      skipCellFocusRef.current = true;
+      if (commitOnOutsideClick) {
+        frameRequestRef.current = requestAnimationFrame(commitOnOutsideMouseDown);
+      }
     }
 
     addEventListener('mousedown', onWindowCaptureMouseDown, { capture: true });
@@ -70,25 +93,21 @@ export default function EditCell<R, SR>({
       removeEventListener('mousedown', onWindowCaptureMouseDown, { capture: true });
       cancelFrameRequest();
     };
-  }, [commitOnOutsideClick, commitOnOutsideMouseDown]);
+  }, [cancelFrameRequest, commitOnOutsideClick, commitOnOutsideMouseDown, skipCellFocusRef]);
 
-  function cancelFrameRequest() {
-    cancelAnimationFrame(frameRequestRef.current!);
-  }
-
-  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (onKeyDown) {
+      const cellEvent = createCellEvent(event);
+      onKeyDown({ mode: 'EDIT', row, column, rowIdx, onClose }, cellEvent);
+      if (cellEvent.isGridDefaultPrevented()) return;
+    }
     if (event.key === 'Escape') {
-      event.stopPropagation();
       // Discard changes
       onClose();
     } else if (event.key === 'Enter') {
-      event.stopPropagation();
       onClose(true);
-    } else {
-      const onNavigation = column.editorOptions?.onNavigation ?? onEditorNavigation;
-      if (!onNavigation(event)) {
-        event.stopPropagation();
-      }
+    } else if (onEditorNavigation(event)) {
+      navigate(event);
     }
   }
 
@@ -130,8 +149,8 @@ export default function EditCell<R, SR>({
         ...getCellStyle(column, colSpan),
         ...additionalStyle
       }}
-      onKeyDown={onKeyDown}
-      onMouseDownCapture={commitOnOutsideClick ? cancelFrameRequest : undefined}
+      onKeyDown={handleKeyDown}
+      onMouseDownCapture={cancelFrameRequest}
     >
       {isGroupColumn && (
         <>
